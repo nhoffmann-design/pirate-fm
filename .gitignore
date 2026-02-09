@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Audio files (for testing)
+music/**/*.mp3
+music/**/*.json
+!music/.gitkeep
+
+# Icecast
+icecast/logs/
+icecast/cache/
+
+# OS
+.DS_Store
+Thumbs.db
