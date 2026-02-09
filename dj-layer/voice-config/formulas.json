@@ -1,0 +1,147 @@
+{
+  "templates": [
+    {
+      "id": 1,
+      "name": "Classic",
+      "description": "Standard intro with genre, mood, and headline inspiration",
+      "template": "Pirate.fm. Back on the frequency. Next up: [GENRE] with [MOOD]. Inspired by [HEADLINE IN 6 WORDS]. Let it run.",
+      "pace": "steady",
+      "persona_tone": "confident, knowledgeable",
+      "use_for_moods": ["neon", "noir", "hopeful"]
+    },
+    {
+      "id": 2,
+      "name": "Cryptic",
+      "description": "Mysterious, rules-breaking vibe",
+      "template": "They wrote the rule. We wrote the chorus. Pirate.fm.",
+      "pace": "deliberate",
+      "persona_tone": "conspiratorial, knowing",
+      "use_for_moods": ["noir", "experimental", "aggressive"]
+    },
+    {
+      "id": 3,
+      "name": "Sarcastic",
+      "description": "News-reactive with attitude",
+      "template": "Today's headline: [HEADLINE]. Our response: bass. Pirate.fm.",
+      "pace": "quick, sharp",
+      "persona_tone": "dry, witty, dismissive of media",
+      "use_for_moods": ["aggressive", "noir"]
+    },
+    {
+      "id": 4,
+      "name": "Retro",
+      "description": "Nostalgic future-tech mashup",
+      "template": "If 1986 had neural nets, it would sound like this. Pirate.fm.",
+      "pace": "wistful",
+      "persona_tone": "reflective, slightly amused",
+      "use_for_moods": ["neon", "hopeful", "experimental"]
+    },
+    {
+      "id": 5,
+      "name": "End-times",
+      "description": "Dark but groovy - civilization is chaos, but the groove holds",
+      "template": "Civilization: questionable. Groove: undeniable. Pirate.fm.",
+      "pace": "slow, ominous",
+      "persona_tone": "resigned, dark humor, knowing",
+      "use_for_moods": ["noir", "aggressive", "experimental"]
+    }
+  ],
+  
+  "rotation_strategy": {
+    "method": "sequential_by_track_id",
+    "description": "Track ID determines which formula is used: (ID - 1) % 5 = formula index",
+    "example": {
+      "track_1": "uses formula 1 (Classic)",
+      "track_2": "uses formula 2 (Cryptic)",
+      "track_3": "uses formula 3 (Sarcastic)",
+      "track_4": "uses formula 4 (Retro)",
+      "track_5": "uses formula 5 (End-times)",
+      "track_6": "uses formula 1 (Classic) - loops back",
+      "track_44": "uses formula 4 (Retro)"
+    }
+  },
+  
+  "substitution_rules": {
+    "[GENRE]": {
+      "description": "Track genre, capitalized, hyphens to spaces",
+      "example": "synthwave -> Synthwave, cyberpunk-lofi -> Cyberpunk Lo-fi"
+    },
+    "[MOOD]": {
+      "description": "Track mood as-is",
+      "example": "neon, noir, aggressive, experimental"
+    },
+    "[HEADLINE IN 6 WORDS]": {
+      "description": "First 6 words of the headline, or full if shorter",
+      "example": "Full headline: 'AI systems breakthrough in natural language understanding' -> 'AI systems breakthrough in natural language'"
+    },
+    "[HEADLINE]": {
+      "description": "Full headline text as-is",
+      "example": "AI systems breakthrough in natural language understanding"
+    }
+  },
+  
+  "voice_performance_notes": {
+    "Classic": {
+      "delivery": "Confident, informative. Like a knowledgeable insider.",
+      "pace": "Normal (0.75x)",
+      "emphasis": "Put weight on the genre and mood names. 'Let it run' = calm command.",
+      "pauses": "Comma after 'frequency', comma after genre/mood combo"
+    },
+    "Cryptic": {
+      "delivery": "Conspiratorial whisper. Like sharing secrets.",
+      "pace": "Slow (0.7x)",
+      "emphasis": "Build up to 'we wrote the chorus' like it's a victory.",
+      "pauses": "Long pause after 'rule.' Shorter pause before 'we wrote'."
+    },
+    "Sarcastic": {
+      "delivery": "Dry, dismissive. Like 'oh, you heard that news too?'",
+      "pace": "Quick (0.8x)",
+      "emphasis": "'Today's headline' = matter-of-fact. 'bass' = final answer, no debate.",
+      "pauses": "Short pauses. Let the sarcasm land."
+    },
+    "Retro": {
+      "delivery": "Wistful, slightly amused. Like remembering an old joke.",
+      "pace": "Medium (0.75x)",
+      "emphasis": "Make '1986 had neural nets' sound absurd and funny.",
+      "pauses": "Pause after '1986'. Let that sink in."
+    },
+    "End-times": {
+      "delivery": "Dark but resigned. Like you knew this was coming.",
+      "pace": "Slow (0.7x)",
+      "emphasis": "'Civilization: questionable' = accepting the inevitable. 'Groove: undeniable' = the only thing left that matters.",
+      "pauses": "Long pause after each colon. Build weight."
+    }
+  },
+  
+  "testing_notes": {
+    "sample_tracks": [
+      {
+        "id": 1,
+        "title": "Neon Futures",
+        "genre": "synthwave",
+        "mood": "neon",
+        "headline": "AI systems breakthrough in natural language understanding",
+        "formula": 1,
+        "expected_intro": "Pirate.fm. Back on the frequency. Next up: Synthwave with neon. Inspired by AI systems breakthrough in natural language. Let it run."
+      },
+      {
+        "id": 2,
+        "title": "Retro Cyber",
+        "genre": "synthwave",
+        "mood": "neon",
+        "headline": "Tech innovation accelerates despite regulation",
+        "formula": 2,
+        "expected_intro": "They wrote the rule. We wrote the chorus. Pirate.fm."
+      },
+      {
+        "id": 3,
+        "title": "Midnight Drive",
+        "genre": "synthwave",
+        "mood": "noir",
+        "headline": "Digital revolution reshapes society",
+        "formula": 3,
+        "expected_intro": "Today's headline: Digital revolution reshapes society. Our response: bass. Pirate.fm."
+      }
+    ]
+  }
+}

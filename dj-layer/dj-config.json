@@ -1,0 +1,117 @@
+{
+  "version": "1.0.0",
+  "persona": "Signal Thief",
+  "description": "Calm, low, confident DJ broadcasting from a closet of stolen transmitters",
+  
+  "elevenlabs": {
+    "api_key": "${ELEVENLABS_API_KEY}",
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "model_id": "eleven_monolingual_v1"
+  },
+  
+  "voice": {
+    "speed": 0.75,
+    "pitch": -0.5,
+    "stability": 0.6,
+    "similarity": 0.8
+  },
+  
+  "catchphrases": [
+    "You're on the frequency. Don't blink.",
+    "Keep it low. Keep it moving.",
+    "If you can hear this, you're already complicit."
+  ],
+  
+  "signature_words": [
+    "frequency",
+    "transmission",
+    "contraband",
+    "artifact",
+    "static",
+    "side-channel"
+  ],
+  
+  "segments": {
+    "headlines": {
+      "heavy": "[HEADLINE]. Anyway, here's the beat version.",
+      "light": "[HEADLINE] inspired this one."
+    },
+    "transmission": {
+      "intense": "This one contains: [MOOD] anxiety and a bassline that refuses therapy.",
+      "chill": "This contains pure [MOOD]. Let it work."
+    },
+    "regulation": [
+      "Some suit said you can't do this. So naturally, we did it twice.",
+      "They tried to ban this frequency. We broadcast it anyway.",
+      "Regulation: attempted. Groove: unaffected.",
+      "They said it was illegal. We call it freedom.",
+      "The algorithm hates this one. We love that."
+    ]
+  },
+  
+  "formulas": {
+    "total": 5,
+    "rotation": "sequential",
+    "description": "Intros cycle through 5 templates by track ID"
+  },
+  
+  "audio_stings": {
+    "modem": {
+      "file": "audio-stings/modem-handshake.wav",
+      "duration_seconds": 3.5,
+      "placement": "before_intro",
+      "fade_in_ms": 500,
+      "fade_out_ms": 300
+    },
+    "tape": {
+      "file": "audio-stings/tape-rewind.wav",
+      "duration_seconds": 1.8,
+      "placement": "after_headline",
+      "fade_in_ms": 100,
+      "fade_out_ms": 200
+    },
+    "whisper": {
+      "file": "audio-stings/pirate-whisper.wav",
+      "duration_seconds": 3.0,
+      "placement": "outro",
+      "fade_in_ms": 400,
+      "fade_out_ms": 500
+    }
+  },
+  
+  "timing": {
+    "intro_duration_seconds": 8,
+    "segment_duration_seconds": 2,
+    "stings_total_duration_seconds": 5,
+    "padding_before_track_ms": 500,
+    "padding_after_track_ms": 1000
+  },
+  
+  "output": {
+    "format": "mp3",
+    "bitrate": "128k",
+    "sample_rate": 44100,
+    "channels": 2,
+    "output_directory": "./output/intros"
+  },
+  
+  "batch_generation": {
+    "enabled": true,
+    "parallel_requests": 1,
+    "rate_limit_ms": 1000,
+    "retry_on_error": 2,
+    "retry_delay_ms": 2000
+  },
+  
+  "database": {
+    "type": "sqlite",
+    "path": "../backend/pirate.db",
+    "auto_update": true
+  },
+  
+  "environment": {
+    "log_level": "info",
+    "debug": false,
+    "dry_run": false
+  }
+}

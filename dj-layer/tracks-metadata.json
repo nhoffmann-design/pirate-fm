@@ -1,0 +1,400 @@
+{
+  "tracks": [
+    {
+      "id": 1,
+      "title": "Neon Futures",
+      "genre": "synthwave",
+      "mood": "neon",
+      "headline": "AI systems breakthrough in natural language understanding",
+      "intensity": 4,
+      "intro_formula": 1
+    },
+    {
+      "id": 2,
+      "title": "Retro Cyber",
+      "genre": "synthwave",
+      "mood": "neon",
+      "headline": "Tech innovation accelerates despite regulation",
+      "intensity": 3,
+      "intro_formula": 2
+    },
+    {
+      "id": 3,
+      "title": "Midnight Drive",
+      "genre": "synthwave",
+      "mood": "noir",
+      "headline": "Digital revolution reshapes society",
+      "intensity": 4,
+      "intro_formula": 3
+    },
+    {
+      "id": 4,
+      "title": "Chrome Dreams",
+      "genre": "synthwave",
+      "mood": "neon",
+      "headline": "Optimism in an age of uncertainty",
+      "intensity": 3,
+      "intro_formula": 4
+    },
+    {
+      "id": 5,
+      "title": "Electric Horizons",
+      "genre": "synthwave",
+      "mood": "neon",
+      "headline": "Future arrives faster than expected",
+      "intensity": 4,
+      "intro_formula": 5
+    },
+    {
+      "id": 6,
+      "title": "Synth Requiem",
+      "genre": "synthwave",
+      "mood": "noir",
+      "headline": "Reflection on technology and humanity",
+      "intensity": 2,
+      "intro_formula": 1
+    },
+    {
+      "id": 7,
+      "title": "Rain City Vibes",
+      "genre": "cyberpunk-lofi",
+      "mood": "noir",
+      "headline": "Urban life accelerated by tech",
+      "intensity": 2,
+      "intro_formula": 2
+    },
+    {
+      "id": 8,
+      "title": "Glitch in the Matrix",
+      "genre": "cyberpunk-lofi",
+      "mood": "experimental",
+      "headline": "Digital dysfunction becomes normal",
+      "intensity": 3,
+      "intro_formula": 3
+    },
+    {
+      "id": 9,
+      "title": "Neon Rain",
+      "genre": "cyberpunk-lofi",
+      "mood": "noir",
+      "headline": "Night shifts in the digital age",
+      "intensity": 2,
+      "intro_formula": 4
+    },
+    {
+      "id": 10,
+      "title": "Chill Protocols",
+      "genre": "cyberpunk-lofi",
+      "mood": "hopeful",
+      "headline": "AI systems learn to chill out",
+      "intensity": 1,
+      "intro_formula": 5
+    },
+    {
+      "id": 11,
+      "title": "Night Shift",
+      "genre": "cyberpunk-lofi",
+      "mood": "noir",
+      "headline": "Late-night coding becomes meditation",
+      "intensity": 2,
+      "intro_formula": 1
+    },
+    {
+      "id": 12,
+      "title": "Fade to Black",
+      "genre": "cyberpunk-lofi",
+      "mood": "noir",
+      "headline": "Tech darkness and introspection",
+      "intensity": 2,
+      "intro_formula": 2
+    },
+    {
+      "id": 13,
+      "title": "Street Code",
+      "genre": "underground-hiphop",
+      "mood": "aggressive",
+      "headline": "Tech activism and grassroots resistance",
+      "intensity": 4,
+      "intro_formula": 3
+    },
+    {
+      "id": 14,
+      "title": "Hustle 2026",
+      "genre": "underground-hiphop",
+      "mood": "aggressive",
+      "headline": "Startup grind never stops",
+      "intensity": 4,
+      "intro_formula": 4
+    },
+    {
+      "id": 15,
+      "title": "Break the Chain",
+      "genre": "underground-hiphop",
+      "mood": "aggressive",
+      "headline": "Freedom from algorithmic control",
+      "intensity": 5,
+      "intro_formula": 5
+    },
+    {
+      "id": 16,
+      "title": "Real Talk",
+      "genre": "underground-hiphop",
+      "mood": "hopeful",
+      "headline": "Honest perspectives on the future",
+      "intensity": 3,
+      "intro_formula": 1
+    },
+    {
+      "id": 17,
+      "title": "Rise Up",
+      "genre": "underground-hiphop",
+      "mood": "aggressive",
+      "headline": "Movement energy for real change",
+      "intensity": 5,
+      "intro_formula": 2
+    },
+    {
+      "id": 18,
+      "title": "Void Meditation",
+      "genre": "ambient-drone",
+      "mood": "noir",
+      "headline": "Emptiness and contemplation",
+      "intensity": 1,
+      "intro_formula": 3
+    },
+    {
+      "id": 19,
+      "title": "Cosmic Dust",
+      "genre": "ambient-drone",
+      "mood": "experimental",
+      "headline": "Cosmic perspective on human problems",
+      "intensity": 1,
+      "intro_formula": 4
+    },
+    {
+      "id": 20,
+      "title": "System Overload",
+      "genre": "ambient-drone",
+      "mood": "noir",
+      "headline": "Crisis echoes through networks",
+      "intensity": 3,
+      "intro_formula": 5
+    },
+    {
+      "id": 21,
+      "title": "Endless Drift",
+      "genre": "ambient-drone",
+      "mood": "experimental",
+      "headline": "Uncertainty without end",
+      "intensity": 2,
+      "intro_formula": 1
+    },
+    {
+      "id": 22,
+      "title": "Deep Space",
+      "genre": "ambient-drone",
+      "mood": "noir",
+      "headline": "Dark introspection in infinite void",
+      "intensity": 1,
+      "intro_formula": 2
+    },
+    {
+      "id": 23,
+      "title": "Euphoria Loop",
+      "genre": "acid-house",
+      "mood": "neon",
+      "headline": "Endless climb into euphoria",
+      "intensity": 5,
+      "intro_formula": 3
+    },
+    {
+      "id": 24,
+      "title": "303 Bliss",
+      "genre": "acid-house",
+      "mood": "neon",
+      "headline": "Hypnotic joy through repetition",
+      "intensity": 4,
+      "intro_formula": 4
+    },
+    {
+      "id": 25,
+      "title": "Unstoppable",
+      "genre": "acid-house",
+      "mood": "neon",
+      "headline": "Momentum that refuses to stop",
+      "intensity": 5,
+      "intro_formula": 5
+    },
+    {
+      "id": 26,
+      "title": "Peak Hours",
+      "genre": "acid-house",
+      "mood": "neon",
+      "headline": "Maximum energy at the peak",
+      "intensity": 5,
+      "intro_formula": 1
+    },
+    {
+      "id": 27,
+      "title": "Acid Dreams",
+      "genre": "acid-house",
+      "mood": "neon",
+      "headline": "Trance state through electronic bliss",
+      "intensity": 4,
+      "intro_formula": 2
+    },
+    {
+      "id": 28,
+      "title": "Infinite Pulse",
+      "genre": "acid-house",
+      "mood": "neon",
+      "headline": "Endless rhythm without end",
+      "intensity": 4,
+      "intro_formula": 3
+    },
+    {
+      "id": 29,
+      "title": "Metal Crash",
+      "genre": "industrial",
+      "mood": "aggressive",
+      "headline": "Systems crashing all around",
+      "intensity": 5,
+      "intro_formula": 4
+    },
+    {
+      "id": 30,
+      "title": "System Failure",
+      "genre": "industrial",
+      "mood": "noir",
+      "headline": "Total collapse and breakdown",
+      "intensity": 5,
+      "intro_formula": 5
+    },
+    {
+      "id": 31,
+      "title": "Pounding Force",
+      "genre": "industrial",
+      "mood": "aggressive",
+      "headline": "Heavy impact and disruption",
+      "intensity": 5,
+      "intro_formula": 1
+    },
+    {
+      "id": 32,
+      "title": "Iron Age",
+      "genre": "industrial",
+      "mood": "aggressive",
+      "headline": "Brutal reality of modern systems",
+      "intensity": 4,
+      "intro_formula": 2
+    },
+    {
+      "id": 33,
+      "title": "Shattered Glass",
+      "genre": "industrial",
+      "mood": "noir",
+      "headline": "Disruption and fragmentation",
+      "intensity": 4,
+      "intro_formula": 3
+    },
+    {
+      "id": 34,
+      "title": "Glitch Reality",
+      "genre": "experimental",
+      "mood": "experimental",
+      "headline": "Reality becomes glitchy and weird",
+      "intensity": 3,
+      "intro_formula": 4
+    },
+    {
+      "id": 35,
+      "title": "Quantum Foam",
+      "genre": "experimental",
+      "mood": "experimental",
+      "headline": "Abstract science meets abstract sound",
+      "intensity": 2,
+      "intro_formula": 5
+    },
+    {
+      "id": 36,
+      "title": "Broken Frequency",
+      "genre": "experimental",
+      "mood": "noir",
+      "headline": "Signals breaking down everywhere",
+      "intensity": 3,
+      "intro_formula": 1
+    },
+    {
+      "id": 37,
+      "title": "Chaos Theory",
+      "genre": "experimental",
+      "mood": "experimental",
+      "headline": "Unpredictable systems unpredictably",
+      "intensity": 4,
+      "intro_formula": 2
+    },
+    {
+      "id": 38,
+      "title": "Absurd World",
+      "genre": "experimental",
+      "mood": "experimental",
+      "headline": "Weirdness as the only constant",
+      "intensity": 3,
+      "intro_formula": 3
+    },
+    {
+      "id": 39,
+      "title": "Fractured Space",
+      "genre": "experimental",
+      "mood": "experimental",
+      "headline": "Space itself becomes fractured",
+      "intensity": 3,
+      "intro_formula": 4
+    },
+    {
+      "id": 40,
+      "title": "F*** the Algorithm",
+      "genre": "punk",
+      "mood": "aggressive",
+      "headline": "Tech rebellion becomes punk rock",
+      "intensity": 5,
+      "intro_formula": 5
+    },
+    {
+      "id": 41,
+      "title": "Anarchy Online",
+      "genre": "punk",
+      "mood": "aggressive",
+      "headline": "Digital anarchy and rebellion",
+      "intensity": 5,
+      "intro_formula": 1
+    },
+    {
+      "id": 42,
+      "title": "No Compromise",
+      "genre": "punk",
+      "mood": "aggressive",
+      "headline": "Defiance without negotiation",
+      "intensity": 5,
+      "intro_formula": 2
+    },
+    {
+      "id": 43,
+      "title": "Rage Against",
+      "genre": "punk",
+      "mood": "aggressive",
+      "headline": "Rage at the machine",
+      "intensity": 5,
+      "intro_formula": 3
+    },
+    {
+      "id": 44,
+      "title": "DIY or Die",
+      "genre": "punk",
+      "mood": "aggressive",
+      "headline": "DIY ethos or nothing at all",
+      "intensity": 5,
+      "intro_formula": 4
+    }
+  ]
+}

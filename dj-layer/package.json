@@ -1,0 +1,41 @@
+{
+  "name": "pirate-fm-dj-layer",
+  "version": "1.0.0",
+  "description": "Signal Thief DJ persona - TTS intros, audio stings, and segment automation for Pirate.fm",
+  "type": "module",
+  "main": "scripts/generate-intros.js",
+  "bin": {
+    "generate-intros": "scripts/generate-intros.js",
+    "create-stings": "scripts/create-stings.js",
+    "load-metadata": "scripts/load-metadata.js",
+    "dj-integration": "scripts/dj-integration.js"
+  },
+  "scripts": {
+    "create-stings": "node scripts/create-stings.js",
+    "load-metadata": "node scripts/load-metadata.js",
+    "samples": "node scripts/generate-intros.js --samples 3",
+    "batch": "node scripts/generate-intros.js --batch",
+    "integrate": "node scripts/dj-integration.js --integrate",
+    "verify": "node scripts/dj-integration.js --verify",
+    "start": "node scripts/create-stings.js && node scripts/load-metadata.js && npm run samples"
+  },
+  "keywords": [
+    "pirate-fm",
+    "dj",
+    "signal-thief",
+    "tts",
+    "audio",
+    "synthesis",
+    "elevenlabs"
+  ],
+  "author": "Nick (Pirate.fm)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.2.2",
+    "node-fetch": "^3.3.0"
+  },
+  "devDependencies": {}
+}
