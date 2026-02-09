@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Backend API + Headline Scraper
+  backend:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_PATH: /app/data/pirate.db
+      ICECAST_HOST: icecast
+      ICECAST_PORT: 8000
+      ICECAST_MOUNT: /pirate.fm
+      ICECAST_PASSWORD: hackme123
+    volumes:
+      - ./data:/app/data
+      - ./music:/app/music
+    depends_on:
+      - icecast
+    networks:
+      - pirate-fm
+
+  # Icecast2 Streaming Server
+  icecast:
+    image: moul/icecast:latest
+    ports:
+      - "8000:8000"
+    environment:
+      ICECAST_ADMIN_USER: admin
+      ICECAST_ADMIN_PASSWORD: hackme123
+      ICECAST_SOURCE_PASSWORD: hackme123
+      ICECAST_RELAY_PASSWORD: hackme123
+    volumes:
+      - ./icecast:/etc/icecast2
+      - ./icecast-logs:/var/log/icecast
+    networks:
+      - pirate-fm
+
+networks:
+  pirate-fm:
+    driver: bridge
