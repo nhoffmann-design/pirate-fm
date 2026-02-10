@@ -1,0 +1,43 @@
+.boot-header {
+  width: 100%;
+  background: #000000;
+  border: none;
+  border-bottom: 2px solid #00ff88;
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 30px;
+  max-height: 250px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #00ff88 #000000;
+}
+
+.boot-text {
+  color: #00ff88;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  animation: blink-cursor 0.5s infinite;
+}
+
+.cursor.hidden {
+  opacity: 0;
+}
+
+.cursor.visible {
+  opacity: 1;
+  color: #00ff88;
+}
+
+@keyframes blink-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
