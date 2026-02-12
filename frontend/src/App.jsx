@@ -8,7 +8,10 @@ import { About } from './pages/About';
 import { Support } from './pages/Support';
 import logo from './assets/pirate-fm-logo.png';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// Use relative URLs to avoid mixed-content issues and local network permission prompts
+const BASE_URL = typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'http://localhost:3000';
+const API_URL = '/api';
+const SOCKET_URL = BASE_URL;
 
 function App() {
   const [currentTrack, setCurrentTrack] = useState(null);
@@ -23,7 +26,7 @@ function App() {
   const introAudioRef = React.useRef(null);
 
   useEffect(() => {
-    const newSocket = io(API_URL);
+    const newSocket = io(SOCKET_URL);
 
     newSocket.on('trackChange', (track) => {
       setCurrentTrack(track);
