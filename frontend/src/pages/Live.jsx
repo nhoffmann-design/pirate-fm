@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNext, djMessage, queue, playHistory, API_URL }) {
+export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNext, djMessage, queue, API_URL }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(currentTrack?.likes || 0);
   const [shareMessage, setShareMessage] = useState('');
-
-  // Reset liked state when track changes
-  useEffect(() => {
-    setLiked(false);
-    setLikeCount(currentTrack?.likes || 0);
-  }, [currentTrack?.id]);
 
   const handleLike = async () => {
     if (!currentTrack?.id) return;
     
     try {
       const endpoint = liked ? 'unlike' : 'like';
-      const res = await fetch(`${API_URL}/tracks/${currentTrack.id}/${endpoint}`, { method: 'POST' });
+      const res = await fetch(`${API_URL}/api/tracks/${currentTrack.id}/${endpoint}`, { method: 'POST' });
       const data = await res.json();
       
       if (res.ok) {
@@ -34,7 +28,7 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
     try {
       // Trigger download from the audio stream endpoint
       const link = document.createElement('a');
-      link.href = `${API_URL}/stream/${currentTrack.id}`;
+      link.href = `${API_URL}/api/stream/${currentTrack.id}`;
       link.download = `${currentTrack.title.replace(/\s+/g, '_')}.mp3`;
       document.body.appendChild(link);
       link.click();
@@ -121,10 +115,16 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
               <div key={i} className="bar" style={{height: `${Math.sin(i * 0.3 + Date.now() / 200) * 50 + 50}%`}}></div>
             ))}
           </div>
-          {/* NEXT button disabled - true radio station, no skipping */}
+          <button 
+            className="next-btn"
+            onClick={onNext}
+            title="Next track"
+          >
+            ⏭ NEXT
+          </button>
         </div>
 
-        {/* Action Buttons */}
+        {/* Bump, Download & Spread the Signal */}
         <div className="track-actions">
           <button 
             className={`action-btn bump-btn ${liked ? 'bumped' : ''}`}
@@ -132,6 +132,13 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
             title="Flags this track for heavier rotation"
           >
             📈 BUMP {likeCount > 0 && `(${likeCount})`}
+          </button>
+          <button 
+            className="action-btn download-btn"
+            onClick={handleDownload}
+            title="Download the track"
+          >
+            ⬇ GRAB IT
           </button>
           <button 
             className="action-btn signal-btn"
@@ -160,21 +167,6 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
               <div className="queue-track-meta">{track.mood} | archives</div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Play History */}
-      <section className="history-box">
-        <div className="box-title">ROTATION HISTORY</div>
-        <div className="history-list">
-          {playHistory.slice(1, 11).map((track, idx) => (
-            <div key={idx} className="history-item">
-              <span className="history-num">{idx + 1}.</span>
-              <span className="history-track">{track.title}</span>
-              <span className="history-mood">{track.mood}</span>
-            </div>
-          ))}
-          {playHistory.length === 0 && <div className="history-empty">Start playing to see rotation...</div>}
         </div>
       </section>
     </div>

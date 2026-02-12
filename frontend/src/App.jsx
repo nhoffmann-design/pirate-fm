@@ -8,35 +8,41 @@ import { About } from './pages/About';
 import { Support } from './pages/Support';
 import logo from './assets/pirate-fm-logo.png';
 
-// Use relative URLs to avoid mixed-content issues and local network permission prompts
-const BASE_URL = typeof window !== 'undefined' && window.location.origin ? window.location.origin : 'http://localhost:3000';
-const API_URL = '/api';
-const SOCKET_URL = BASE_URL;
-const STREAM_URL = '/api/stream/current'; // On-demand track serving (not live)
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function App() {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [listenerCount, setListenerCount] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [socket, setSocket] = useState(null);
   const [queue, setQueue] = useState([]);
   const [djMessage, setDjMessage] = useState('');
   const [introAudio, setIntroAudio] = useState(null);
   const [currentPage, setCurrentPage] = useState('live');
-  const [playHistory, setPlayHistory] = useState([]);
   const audioRef = React.useRef(null);
   const introAudioRef = React.useRef(null);
 
   useEffect(() => {
-    const newSocket = io(SOCKET_URL);
+    const newSocket = io(API_URL);
 
     newSocket.on('trackChange', (track) => {
-      // Update metadata display but don't change audio source (continuous stream)
       setCurrentTrack(track);
-      console.log(`[TRACK] Now playing: ${track.title} (${track.mood})`);
       
-      // Fetch and speak Signal Thief intro
+      // Set audio source first
+      if (audioRef.current && track?.id) {
+        const url = `${API_URL}/api/stream/${track.id}`;
+        audioRef.current.src = url;
+      }
+      
+      // Fetch DJ message and it will speak the intro via TTS
       fetchDJMessage('intro');
+      
+      // Start track after 5 seconds (time for intro to speak + buffer)
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.play().catch(err => console.warn('Playback error:', err));
+        }
+      }, 5000);
     });
 
     newSocket.on('listenerCount', (count) => {
@@ -45,30 +51,21 @@ function App() {
 
     setSocket(newSocket);
 
-    // Add event listeners for debugging (don't set src yet - wait for user play)
-    if (audioRef.current) {
-      audioRef.current.addEventListener('play', () => console.log('[AUDIO] play event fired'));
-      audioRef.current.addEventListener('pause', () => console.log('[AUDIO] pause event fired'));
-      audioRef.current.addEventListener('canplay', () => console.log('[AUDIO] canplay event fired'));
-      audioRef.current.addEventListener('error', (e) => console.error('[AUDIO] error event:', e.target.error));
-      audioRef.current.addEventListener('loadstart', () => console.log('[AUDIO] loadstart event fired'));
-      audioRef.current.addEventListener('loadedmetadata', () => console.log('[AUDIO] loadedmetadata event fired'));
-      audioRef.current.addEventListener('stalled', () => console.warn('[AUDIO] stalled event fired'));
-    }
-
-    // Fetch current track metadata
-    fetch(`${API_URL}/current`)
+    fetch(`${API_URL}/api/current`)
       .then((res) => res.json())
       .then((data) => {
         if (data.track) {
           setCurrentTrack(data.track);
+          if (audioRef.current && data.track.id) {
+            audioRef.current.src = `${API_URL}/api/stream/${data.track.id}`;
+          }
         }
         setListenerCount(data.listeners);
-        // Don't set isPlaying from API - let user click PLAY to start
+        setIsPlaying(data.isPlaying);
       })
       .catch((err) => console.error('Failed to fetch current track:', err));
 
-    fetch(`${API_URL}/tracks?limit=10`)
+    fetch(`${API_URL}/api/tracks?limit=10`)
       .then((res) => res.json())
       .then((data) => setQueue(data))
       .catch((err) => console.error('Failed to fetch queue:', err));
@@ -78,82 +75,46 @@ function App() {
     };
   }, []);
 
-  // Track play history
-  useEffect(() => {
-    if (currentTrack?.id) {
-      setPlayHistory(prev => {
-        // Don't add duplicates (same track back-to-back)
-        if (prev.length > 0 && prev[0].id === currentTrack.id) {
-          return prev;
-        }
-        // Keep last 15 tracks
-        return [currentTrack, ...prev].slice(0, 15);
-      });
-    }
-  }, [currentTrack?.id]);
-
   const handlePlayPause = () => {
-    if (!audioRef.current) {
-      console.error('[AUDIO] audioRef.current is null');
-      return;
-    }
-
-    console.log('[AUDIO] handlePlayPause called, isPlaying:', isPlaying, 'src:', audioRef.current.src);
-
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      console.log('[AUDIO] Paused');
-    } else {
-      // Use current track's static file path (allows resume from paused position)
-      if (currentTrack?.file_path) {
-        const trackFilePath = `/music${currentTrack.file_path}`;
-        audioRef.current.src = trackFilePath;
-        console.log('[AUDIO] Playing:', trackFilePath);
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
       } else {
-        console.error('[AUDIO] No currentTrack.file_path available');
-        return;
+        audioRef.current.play().catch(err => console.warn('Playback error:', err));
       }
-      
-      audioRef.current.play()
-        .then(() => {
-          console.log('[AUDIO] Playback started');
-          setIsPlaying(true);
-        })
-        .catch(err => {
-          console.error('[AUDIO] play() failed:', err.name, err.message);
-          setIsPlaying(false);
-        });
     }
+    setIsPlaying(!isPlaying);
   };
 
   const handleNext = async () => {
-    // Disabled - auto-advance handled by handleAudioEnded
-    console.log('[AUDIO] Next button disabled in on-demand mode');
+    try {
+      const res = await fetch(`${API_URL}/api/next`, { method: 'POST' });
+      const data = await res.json();
+      setCurrentTrack(data.track);
+      if (audioRef.current && data.track?.id) {
+        audioRef.current.src = `${API_URL}/api/stream/${data.track.id}`;
+      }
+    } catch (err) {
+      console.error('Failed to skip track:', err);
+    }
   };
 
   const handleAudioEnded = async () => {
-    console.log('[AUDIO] Track ended, fetching next track...');
+    console.log('[AUDIO] Track ended, advancing to next...');
     try {
-      // Query the backend for the next track
-      const res = await fetch(`${API_URL}/next`, { method: 'POST' });
+      const res = await fetch(`${API_URL}/api/next`, { method: 'POST' });
       const data = await res.json();
-      console.log('[AUDIO] Backend advanced to:', data.track?.title);
       setCurrentTrack(data.track);
-      
-      // Load and play the new current track (use static file path)
-      if (audioRef.current && data.track?.file_path) {
-        const trackFilePath = `/music${data.track.file_path}`;
-        audioRef.current.src = trackFilePath;
-        console.log('[AUDIO] Next track loaded:', trackFilePath);
+      if (audioRef.current && data.track?.id) {
+        const url = `${API_URL}/api/stream/${data.track.id}`;
         
         const playWhenReady = () => {
-          console.log('[AUDIO] New track ready, auto-playing...');
-          audioRef.current.play().catch(err => console.warn('Autoplay failed:', err));
+          audioRef.current.play().catch(err => console.warn('Autoplay after track end failed:', err));
           audioRef.current.removeEventListener('canplay', playWhenReady);
         };
         
         audioRef.current.addEventListener('canplay', playWhenReady);
+        audioRef.current.src = url;
       }
     } catch (err) {
       console.error('Failed to advance track:', err);
@@ -162,7 +123,7 @@ function App() {
 
   const fetchDJMessage = async (type = 'intro') => {
     try {
-      const res = await fetch(`${API_URL}/dj/${type}`);
+      const res = await fetch(`${API_URL}/api/dj/${type}`);
       const data = await res.json();
       setDjMessage(data.message);
       
@@ -272,7 +233,6 @@ function App() {
               onNext={handleNext}
               djMessage={djMessage}
               queue={queue}
-              playHistory={playHistory}
               API_URL={API_URL}
             />
           )}

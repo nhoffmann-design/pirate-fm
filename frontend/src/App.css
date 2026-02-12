@@ -381,52 +381,6 @@ body {
   letter-spacing: 1px;
 }
 
-/* History Box */
-.history-box {
-  min-height: 200px;
-}
-
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.history-item {
-  display: flex;
-  gap: 12px;
-  font-size: 12px;
-  color: #00ff88;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #00ff8822;
-}
-
-.history-num {
-  color: #00aa55;
-  font-weight: bold;
-  min-width: 25px;
-}
-
-.history-track {
-  flex: 1;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-}
-
-.history-mood {
-  font-size: 10px;
-  color: #00aa55;
-  opacity: 0.8;
-}
-
-.history-empty {
-  color: #00aa55;
-  font-size: 12px;
-  font-style: italic;
-  padding: 20px 0;
-}
-
 /* Footer */
 .app-footer {
   border: 2px solid #00ff88;
