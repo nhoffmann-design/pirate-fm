@@ -87,15 +87,36 @@ let isPlaying = true;
 
 // Get current track with like count
 app.get('/api/current', (req, res) => {
-  const playlist = db.prepare('SELECT * FROM playlist WHERE id = 1').get();
-  const track = db.prepare('SELECT * FROM tracks WHERE id = ?').get(playlist?.current_track_id || 1);
-  const likes = db.prepare('SELECT COUNT(*) as count FROM track_likes WHERE track_id = ?').get(playlist?.current_track_id || 1);
-  
-  res.json({
-    track: track ? { ...track, likes: likes.count } : { title: 'Loading...', mood: 'synthwave', file_path: '', likes: 0 },
-    listeners: listenerCount,
-    isPlaying,
-  });
+  try {
+    const playlist = db.prepare('SELECT * FROM playlist WHERE id = 1').get();
+    
+    if (!playlist) {
+      console.error('[API] Playlist not found, initializing...');
+      db.prepare('INSERT OR IGNORE INTO playlist (id, current_track_id) VALUES (1, 27)').run();
+      const newPlaylist = db.prepare('SELECT * FROM playlist WHERE id = 1').get();
+      var trackId = newPlaylist?.current_track_id || 27;
+    } else {
+      var trackId = playlist.current_track_id;
+    }
+    
+    const track = db.prepare('SELECT * FROM tracks WHERE id = ?').get(trackId);
+    const likes = track ? db.prepare('SELECT COUNT(*) as count FROM track_likes WHERE track_id = ?').get(track.id) : { count: 0 };
+    
+    console.log(`[API] Playlist: ${JSON.stringify(playlist || 'null')}, Track ID: ${trackId}, Track: ${track?.title || 'null'}`);
+    
+    res.json({
+      track: track || { title: 'Loading...', mood: 'synthwave', file_path: '', likes: 0 },
+      listeners: listenerCount,
+      isPlaying,
+    });
+  } catch (err) {
+    console.error('[API] /api/current error:', err);
+    res.json({
+      track: { title: 'Error', mood: 'error', file_path: '', likes: 0 },
+      listeners: listenerCount,
+      isPlaying,
+    });
+  }
 });
 
 // Get listener count
@@ -205,6 +226,34 @@ app.get('/api/tracks/:trackId/likes', (req, res) => {
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Stream current track file (on-demand, not live streaming)
+app.get('/api/stream/current', (req, res) => {
+  try {
+    const playlist = db.prepare('SELECT current_track_id FROM playlist WHERE id = 1').get();
+    const track = db.prepare('SELECT * FROM tracks WHERE id = ?').get(playlist?.current_track_id);
+    
+    if (!track) {
+      return res.status(404).json({ error: 'No current track' });
+    }
+    
+    console.log('[STREAM] Serving current track:', track.title);
+    
+    // Serve the track file
+    if (track.file_path.startsWith('/music/')) {
+      const filePath = join(__dirname, '..', track.file_path);
+      res.set('Content-Type', 'audio/mpeg');
+      res.set('Access-Control-Allow-Origin', '*');
+      res.set('Cache-Control', 'no-cache');
+      return res.sendFile(filePath);
+    }
+    
+    res.status(404).json({ error: 'Track file not found' });
+  } catch (err) {
+    console.error('[STREAM] Error:', err.message);
+    res.status(500).json({ error: 'Stream error' });
+  }
 });
 
 // Audio proxy (handle local files and external URLs)
