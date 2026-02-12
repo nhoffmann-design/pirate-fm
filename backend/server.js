@@ -207,6 +207,39 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Stream current track from playlist pointer
+app.get('/api/stream/current', async (req, res) => {
+  try {
+    const playlist = db.prepare('SELECT current_track_id FROM playlist WHERE id = 1').get();
+    const track = db.prepare('SELECT * FROM tracks WHERE id = ?').get(playlist?.current_track_id);
+    
+    if (!track) {
+      return res.status(404).json({ error: 'No current track' });
+    }
+    
+    console.log('[STREAM] Serving current track:', track.title);
+    
+    // If it's a local file path, serve it directly
+    if (track.file_path.startsWith('/music/')) {
+      const filePath = join(__dirname, '..', track.file_path);
+      res.set('Content-Type', 'audio/mpeg');
+      res.set('Access-Control-Allow-Origin', '*');
+      res.set('Cache-Control', 'no-cache');
+      return res.sendFile(filePath);
+    }
+    
+    // Otherwise proxy external URLs
+    const fetch = (await import('node-fetch')).default;
+    const audioRes = await fetch(track.file_path);
+    res.set('Content-Type', 'audio/mpeg');
+    res.set('Access-Control-Allow-Origin', '*');
+    audioRes.body.pipe(res);
+  } catch (err) {
+    console.error('[STREAM] Error:', err.message);
+    res.status(500).json({ error: 'Stream error' });
+  }
+});
+
 // Audio proxy (handle local files and external URLs)
 app.get('/api/stream/:trackId', async (req, res) => {
   const { trackId } = req.params;
