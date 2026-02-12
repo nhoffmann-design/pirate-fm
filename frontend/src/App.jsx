@@ -32,6 +32,9 @@ function App() {
     newSocket.on('trackChange', (track) => {
       setCurrentTrack(track);
       console.log(`[TRACK] Now playing: ${track.title}`);
+      
+      // Fetch and display DJ message
+      fetchDJMessage('intro');
     });
 
     newSocket.on('listenerCount', (count) => {
@@ -45,6 +48,7 @@ function App() {
       .then((data) => {
         if (data.track) {
           setCurrentTrack(data.track);
+          fetchDJMessage('intro');
         }
         setListenerCount(data.listeners);
       })
