@@ -30,11 +30,13 @@ function App() {
     const newSocket = io(SOCKET_URL);
 
     newSocket.on('trackChange', (track) => {
-      setCurrentTrack(track);
-      console.log(`[TRACK] Now playing: ${track.title}`);
-      
-      // Fetch and display DJ message
-      fetchDJMessage('intro');
+      console.log(`[SOCKET] trackChange received:`, track?.title);
+      if (track) {
+        setCurrentTrack(track);
+        fetchDJMessage('intro');
+      } else {
+        console.error('[SOCKET] trackChange received with no track data');
+      }
     });
 
     newSocket.on('listenerCount', (count) => {
@@ -99,24 +101,34 @@ function App() {
   };
 
   const handleAudioEnded = async () => {
-    console.log('[AUDIO] Track ended, advancing to next...');
+    console.log('[AUDIO] Track ended. Current track:', currentTrack?.title);
     try {
       const res = await fetch(`${API_URL}/next`, { method: 'POST' });
       const data = await res.json();
-      setCurrentTrack(data.track);
-      if (audioRef.current && data.track) {
-        const url = `${API_URL}/stream/current`;
-        audioRef.current.src = url;
+      console.log('[AUDIO] Backend advanced to:', data.track?.title);
+      
+      if (data.track) {
+        // Update UI immediately
+        setCurrentTrack(data.track);
         
-        const playWhenReady = () => {
-          audioRef.current.play().catch(err => console.warn('Autoplay failed:', err));
-          audioRef.current.removeEventListener('canplay', playWhenReady);
-        };
-        
-        audioRef.current.addEventListener('canplay', playWhenReady);
+        // Reset audio source with cache bust to force reload
+        if (audioRef.current) {
+          const cacheBust = `?t=${Date.now()}`;
+          const url = `${API_URL}/stream/current${cacheBust}`;
+          audioRef.current.src = url;
+          console.log('[AUDIO] Loading new track:', url);
+          
+          const playWhenReady = () => {
+            console.log('[AUDIO] New track ready, auto-playing...');
+            audioRef.current.play().catch(err => console.warn('Autoplay failed:', err));
+            audioRef.current.removeEventListener('canplay', playWhenReady);
+          };
+          
+          audioRef.current.addEventListener('canplay', playWhenReady, { once: true });
+        }
       }
     } catch (err) {
-      console.error('Failed to advance track:', err);
+      console.error('[AUDIO] Failed to advance track:', err);
     }
   };
 
