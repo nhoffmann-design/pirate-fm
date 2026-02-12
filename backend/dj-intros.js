@@ -39,6 +39,41 @@ const INTROS = {
     "In the ashes of order, chaos sings.",
     "Reality breaks down. The signal persists.",
   ],
+  station_id_short: [
+    "Frequency's live. Pirate.fm.",
+    "Still tuned in. Still loud. Pirate.fm.",
+    "No ads. No apologies. Pirate.fm.",
+    "Broadcasting from the static. Pirate.fm.",
+    "You found the frequency. Don't waste it. Pirate.fm.",
+    "Keep it low. Keep it moving. Pirate.fm.",
+    "Transmission holds. Pirate.fm.",
+    "If you can hear this, it's working. Pirate.fm.",
+    "Stay tuned. Pirate.fm.",
+    "Radio's not dead. It's hiding. Pirate.fm.",
+  ],
+  station_id_medium: [
+    "Reality's noisy. We're louder. Pirate.fm.",
+    "The world talks. We transmit. Pirate.fm.",
+    "Still broadcasting. Still intact. Keep the frequency alive. Pirate.fm.",
+    "No feed. No scroll. Just signal. Pirate.fm.",
+    "Retro transmissions from the future. Don't blink. Pirate.fm.",
+    "If the dial feels wrong, that's the point. Pirate.fm.",
+    "Broadcast continues. Permission denied. Pirate.fm.",
+    "We don't chase trends. We steal frequencies. Pirate.fm.",
+  ],
+  station_id_edgy: [
+    "Still broadcasting. Still irritating someone important. Pirate.fm.",
+    "Still live. Still illegal-ish. Still beautiful. Pirate.fm.",
+    "The rules are expensive. The signal is free. Pirate.fm.",
+    "Broadcasting responsibly, which is to say, not at all. Pirate.fm.",
+    "Compliance is a myth. Pirate.fm.",
+    "Still defiant. Still unsponsored. Pirate.fm.",
+  ],
+  station_id_frequency_alive: [
+    "You know the drill. Keep the frequency alive. Pirate.fm.",
+    "Frequency's breathing. Keep it alive. Pirate.fm.",
+    "Transmission stable. Frequency alive. Pirate.fm.",
+  ],
 };
 
 const OUTROS = [
