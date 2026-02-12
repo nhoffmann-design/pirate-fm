@@ -22,27 +22,6 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
     }
   };
 
-  const handleDownload = async () => {
-    if (!currentTrack?.id) return;
-    
-    try {
-      // Trigger download from the audio stream endpoint
-      const link = document.createElement('a');
-      link.href = `${API_URL}/api/stream/${currentTrack.id}`;
-      link.download = `${currentTrack.title.replace(/\s+/g, '_')}.mp3`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      setShareMessage('Track downloaded!');
-      setTimeout(() => setShareMessage(''), 3000);
-    } catch (err) {
-      console.error('Download failed:', err);
-      setShareMessage('Download failed');
-      setTimeout(() => setShareMessage(''), 3000);
-    }
-  };
-
   const handleShare = async () => {
     // Build share text with DJ message for personality
     const djQuote = djMessage ? `"${djMessage}"\n\n` : '';
@@ -115,16 +94,9 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
               <div key={i} className="bar" style={{height: `${Math.sin(i * 0.3 + Date.now() / 200) * 50 + 50}%`}}></div>
             ))}
           </div>
-          <button 
-            className="next-btn"
-            onClick={onNext}
-            title="Next track"
-          >
-            ⏭ NEXT
-          </button>
         </div>
 
-        {/* Bump, Download & Spread the Signal */}
+        {/* Bump & Spread the Signal */}
         <div className="track-actions">
           <button 
             className={`action-btn bump-btn ${liked ? 'bumped' : ''}`}
@@ -132,13 +104,6 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
             title="Flags this track for heavier rotation"
           >
             📈 BUMP {likeCount > 0 && `(${likeCount})`}
-          </button>
-          <button 
-            className="action-btn download-btn"
-            onClick={handleDownload}
-            title="Download the track"
-          >
-            ⬇ GRAB IT
           </button>
           <button 
             className="action-btn signal-btn"

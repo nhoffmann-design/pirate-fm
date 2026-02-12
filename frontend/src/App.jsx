@@ -16,7 +16,7 @@ const SOCKET_URL = BASE_URL;
 function App() {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [listenerCount, setListenerCount] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [socket, setSocket] = useState(null);
   const [queue, setQueue] = useState([]);
   const [djMessage, setDjMessage] = useState('');
@@ -31,22 +31,7 @@ function App() {
 
     newSocket.on('trackChange', (track) => {
       setCurrentTrack(track);
-      
-      // Set audio source first
-      if (audioRef.current && track?.id) {
-        const url = `${API_URL}/api/stream/${track.id}`;
-        audioRef.current.src = url;
-      }
-      
-      // Fetch DJ message and it will speak the intro via TTS
-      fetchDJMessage('intro');
-      
-      // Start track after 5 seconds (time for intro to speak + buffer)
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.play().catch(err => console.warn('Playback error:', err));
-        }
-      }, 5000);
+      console.log(`[TRACK] Now playing: ${track.title}`);
     });
 
     newSocket.on('listenerCount', (count) => {
@@ -55,21 +40,17 @@ function App() {
 
     setSocket(newSocket);
 
-    fetch(`${API_URL}/api/current`)
+    fetch(`${API_URL}/current`)
       .then((res) => res.json())
       .then((data) => {
         if (data.track) {
           setCurrentTrack(data.track);
-          if (audioRef.current && data.track.id) {
-            audioRef.current.src = `${API_URL}/api/stream/${data.track.id}`;
-          }
         }
         setListenerCount(data.listeners);
-        setIsPlaying(data.isPlaying);
       })
       .catch((err) => console.error('Failed to fetch current track:', err));
 
-    fetch(`${API_URL}/api/tracks?limit=10`)
+    fetch(`${API_URL}/tracks?limit=10`)
       .then((res) => res.json())
       .then((data) => setQueue(data))
       .catch((err) => console.error('Failed to fetch queue:', err));
@@ -93,46 +74,42 @@ function App() {
     }
   }, [currentTrack?.id]);
 
-  const handlePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch(err => console.warn('Playback error:', err));
-      }
+  const handlePlayPause = async () => {
+    if (!audioRef.current || !currentTrack) return;
+    
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      // Set the audio source to the current track
+      const url = `${API_URL}/stream/current`;
+      audioRef.current.src = url;
+      audioRef.current.play().catch(err => console.warn('Playback error:', err));
+      setIsPlaying(true);
     }
-    setIsPlaying(!isPlaying);
   };
 
-  const handleNext = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/next`, { method: 'POST' });
-      const data = await res.json();
-      setCurrentTrack(data.track);
-      if (audioRef.current && data.track?.id) {
-        audioRef.current.src = `${API_URL}/api/stream/${data.track.id}`;
-      }
-    } catch (err) {
-      console.error('Failed to skip track:', err);
-    }
+  const handleNext = () => {
+    // Disabled - tracks advance automatically
+    console.log('[AUDIO] Next disabled in auto-advance mode');
   };
 
   const handleAudioEnded = async () => {
     console.log('[AUDIO] Track ended, advancing to next...');
     try {
-      const res = await fetch(`${API_URL}/api/next`, { method: 'POST' });
+      const res = await fetch(`${API_URL}/next`, { method: 'POST' });
       const data = await res.json();
       setCurrentTrack(data.track);
-      if (audioRef.current && data.track?.id) {
-        const url = `${API_URL}/api/stream/${data.track.id}`;
+      if (audioRef.current && data.track) {
+        const url = `${API_URL}/stream/current`;
+        audioRef.current.src = url;
         
         const playWhenReady = () => {
-          audioRef.current.play().catch(err => console.warn('Autoplay after track end failed:', err));
+          audioRef.current.play().catch(err => console.warn('Autoplay failed:', err));
           audioRef.current.removeEventListener('canplay', playWhenReady);
         };
         
         audioRef.current.addEventListener('canplay', playWhenReady);
-        audioRef.current.src = url;
       }
     } catch (err) {
       console.error('Failed to advance track:', err);
@@ -141,7 +118,7 @@ function App() {
 
   const fetchDJMessage = async (type = 'intro') => {
     try {
-      const res = await fetch(`${API_URL}/api/dj/${type}`);
+      const res = await fetch(`${API_URL}/dj/${type}`);
       const data = await res.json();
       setDjMessage(data.message);
       
