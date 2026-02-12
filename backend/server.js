@@ -345,8 +345,25 @@ setInterval(() => {
   io.emit('listenerCount', listenerCount);
 }, 5000);
 
-// Auto-advance track (disabled - use frontend audio 'ended' event instead)
-// setInterval(() => { ... }, 180000);
+// Auto-advance track every 3 minutes (180000ms) as fallback
+// This ensures tracks advance even if frontend onEnded doesn't fire
+const TRACK_DURATION_MS = 180000; // 3 minutes default
+setInterval(() => {
+  const playlist = db.prepare('SELECT current_track_id FROM playlist WHERE id = 1').get();
+  const allTracks = db.prepare('SELECT id FROM tracks ORDER BY id').all();
+  
+  if (allTracks.length === 0) return;
+  
+  const currentIdx = allTracks.findIndex(t => t.id === playlist?.current_track_id);
+  const nextIdx = currentIdx >= 0 ? (currentIdx + 1) % allTracks.length : 0;
+  const nextId = allTracks[nextIdx].id;
+  
+  db.prepare('UPDATE playlist SET current_track_id = ?, last_updated = CURRENT_TIMESTAMP WHERE id = 1').run(nextId);
+  const newTrack = db.prepare('SELECT * FROM tracks WHERE id = ?').get(nextId);
+  
+  console.log(`[AUTO-ADVANCE] ${playlist?.current_track_id} → ${nextId} (${newTrack?.title})`);
+  io.emit('trackChange', newTrack);
+}, TRACK_DURATION_MS);
 
 // Start server
 const PORT = process.env.PORT || 3000;

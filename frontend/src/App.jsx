@@ -84,11 +84,13 @@ function App() {
     if (!audioRef.current || !currentTrack) return;
     
     if (isPlaying) {
+      console.log('[AUDIO] Pausing');
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
       // Set the audio source to the current track
       const url = `${API_URL}/stream/current`;
+      console.log('[AUDIO] Playing:', currentTrack?.title, 'URL:', url);
       audioRef.current.src = url;
       audioRef.current.play().catch(err => console.warn('Playback error:', err));
       setIsPlaying(true);
@@ -170,7 +172,14 @@ function App() {
   return (
     <div className="app">
       <div className="scanlines"></div>
-      <audio ref={audioRef} crossOrigin="anonymous" onEnded={handleAudioEnded} />
+      <audio 
+        ref={audioRef} 
+        crossOrigin="anonymous" 
+        onEnded={handleAudioEnded}
+        onPlay={() => console.log('[AUDIO] PLAY event')}
+        onPause={() => console.log('[AUDIO] PAUSE event')}
+        onLoadedmetadata={() => console.log('[AUDIO] LOADEDMETADATA event')}
+      />
       
       <BootScreen />
 
