@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNext, djMessage, queue, API_URL }) {
+export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNext, djMessage, queue, playHistory, API_URL }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(currentTrack?.likes || 0);
   const [shareMessage, setShareMessage] = useState('');
@@ -169,6 +169,21 @@ export function Live({ currentTrack, listenerCount, isPlaying, onPlayPause, onNe
           ))}
         </div>
       </section>
+
+      {/* Recently Played */}
+      {playHistory && playHistory.length > 0 && (
+        <section className="history-box">
+          <div className="box-title">RECENTLY PLAYED</div>
+          <div className="history-list">
+            {playHistory.slice(0, 8).map((track, idx) => (
+              <div key={idx} className="history-item">
+                <div className="history-track-name">{track.title}</div>
+                <div className="history-track-meta">{track.mood}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

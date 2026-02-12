@@ -381,6 +381,45 @@ body {
   letter-spacing: 1px;
 }
 
+/* Recently Played History */
+.history-box {
+  min-height: 200px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  background: rgba(0, 255, 136, 0.03);
+  border: 1px solid #00ff8844;
+  padding: 12px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.history-item:hover {
+  background: rgba(0, 255, 136, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+  border-color: #00ff88;
+}
+
+.history-track-name {
+  font-size: 13px;
+  color: #00ff88;
+  margin-bottom: 4px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.history-track-meta {
+  font-size: 11px;
+  color: #00aa55;
+  letter-spacing: 1px;
+}
+
 /* Footer */
 .app-footer {
   border: 2px solid #00ff88;

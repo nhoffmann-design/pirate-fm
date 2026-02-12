@@ -22,6 +22,7 @@ function App() {
   const [djMessage, setDjMessage] = useState('');
   const [introAudio, setIntroAudio] = useState(null);
   const [currentPage, setCurrentPage] = useState('live');
+  const [playHistory, setPlayHistory] = useState([]);
   const audioRef = React.useRef(null);
   const introAudioRef = React.useRef(null);
 
@@ -77,6 +78,20 @@ function App() {
       newSocket.close();
     };
   }, []);
+
+  // Track play history
+  useEffect(() => {
+    if (currentTrack?.id) {
+      setPlayHistory(prev => {
+        // Don't add duplicates (same track back-to-back)
+        if (prev.length > 0 && prev[0].id === currentTrack.id) {
+          return prev;
+        }
+        // Keep last 15 tracks
+        return [currentTrack, ...prev].slice(0, 15);
+      });
+    }
+  }, [currentTrack?.id]);
 
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -236,6 +251,7 @@ function App() {
               onNext={handleNext}
               djMessage={djMessage}
               queue={queue}
+              playHistory={playHistory}
               API_URL={API_URL}
             />
           )}
